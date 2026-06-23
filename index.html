@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Mạng Ảnh Và Video Giống Flickr</title>
-    <!-- Nhúng thư viện Supabase để kết nối mạng -->
-     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Nhúng thư viện Supabase gốc viết thường để máy tính nhận diện -->
+    <script src="https://unpkg.com"></script>
 </head>
-<body
+<body>
     <h1>Mạng chia sẻ ảnh & video ngắn</h1>
     
     <!-- Nút chọn ảnh hoặc video ngắn -->
@@ -16,14 +16,22 @@
     <div id="kho-chua-mang" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;"></div>
 
     <script>
-        // Đường link kết nối chính xác đến kho ảnh riêng của chú
-        // Chỉ khai báo ĐÚNG 1 DÒNG NÀY để máy tính không bị lặp lỗi nữa chú nhé
+        // Lấy chìa khóa bảo mật tự động từ hệ thống mạng Vercel truyền vào
+        const SUPABASE_URL = window.env?.SUPABASE_URL || "";
+        const SUPABASE_KEY = window.env?.SUPABASE_KEY || "";
+        
+        // Lệnh kích hoạt kết nối chính thức đến Supabase
         const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
         const nutChonFile = document.getElementById('chon-file');
         const khoChuaMang = document.getElementById('kho-chua-mang');
 
         // Hàm tải và hiện toàn bộ ảnh/video từ mạng về màn hình
         async function taiDuLieu() {
+            if (!SUPABASE_URL || !SUPABASE_KEY) {
+                khoChuaMang.innerHTML = '<p style="color: red;">Chưa cấu hình chìa khóa bảo mật trên Vercel chú ơi!</p>';
+                return;
+            }
             khoChuaMang.innerHTML = '<p>Đang tải danh sách ảnh và video...</p>';
             const { data, error } = await supabase.storage.from('flickr-data').list();
             

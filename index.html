@@ -21,7 +21,7 @@
         const SUPABASE_KEY = "sb_publishable_VJn-S8BB7tP-bpWLsYY8QQ__EmspkUF";
         
         // Lệnh kích hoạt dùng chữ viết thường toàn bộ để đồng bộ với dòng số 7
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         const nutChonFile = document.getElementById('chon-file');
         const khoChuaMang = document.getElementById('kho-chua-mang');

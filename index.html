@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Mạng Ảnh Và Video Giống Flickr</title>
-    <!-- Nhúng thư viện Supabase gốc viết thường để máy tính nhận diện -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <!-- Nhúng thư viện Supabase bản mới nhất qua jsDelivr để máy tính nhận diện được chữ viết hoa -->
+    <script src="https://jsdelivr.net"></script>
 </head>
 <body>
     <h1>Mạng chia sẻ ảnh & video ngắn</h1>
@@ -17,11 +17,11 @@
 
     <script>
         // Địa chỉ kết nối tự động lấy từ chìa khóa bảo mật Vercel truyền vào
-        const SUPABASE_URL = "https://ynrdazipatpzmffitvqo.supabase.co";
+        const SUPABASE_URL = "https://supabase.co";
         const SUPABASE_KEY = "sb_publishable_VJn-S8BB7tP-bpWLsYY8QQ__EmspkUF";
         
-        // Sửa vế sau thành chữ viết thường toàn bộ theo đúng chuẩn Google tra cứu
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Khai báo chuẩn viết hoa chữ S theo tài liệu gốc của Supabase
+        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         const nutChonFile = document.getElementById('chon-file');
         const khoChuaMang = document.getElementById('kho-chua-mang');

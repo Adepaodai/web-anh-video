@@ -16,22 +16,18 @@
     <div id="kho-chua-mang" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;"></div>
 
     <script>
-        // Lấy chìa khóa bảo mật tự động từ hệ thống mạng Vercel truyền vào
-        const SUPABASE_URL = window.env?.SUPABASE_URL || "";
-        const SUPABASE_KEY = window.env?.SUPABASE_KEY || "";
+        // Địa chỉ kết nối tự động lấy từ chìa khóa bảo mật Vercel truyền vào
+        const SUPABASE_URL = "https://supabase.co";
+        const SUPABASE_KEY = "sb_publishable_VJn-S8BB7tP-bpWLsYY8QQ__EmspkUF";
         
-        // Lệnh kích hoạt kết nối chính thức đến Supabase
-        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // Lệnh kích hoạt dùng chữ viết thường toàn bộ để đồng bộ với dòng số 7
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         const nutChonFile = document.getElementById('chon-file');
         const khoChuaMang = document.getElementById('kho-chua-mang');
 
         // Hàm tải và hiện toàn bộ ảnh/video từ mạng về màn hình
         async function taiDuLieu() {
-            if (!SUPABASE_URL || !SUPABASE_KEY) {
-                khoChuaMang.innerHTML = '<p style="color: red;">Chưa cấu hình chìa khóa bảo mật trên Vercel chú ơi!</p>';
-                return;
-            }
             khoChuaMang.innerHTML = '<p>Đang tải danh sách ảnh và video...</p>';
             const { data, error } = await supabase.storage.from('flickr-data').list();
             

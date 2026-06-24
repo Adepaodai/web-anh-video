@@ -3,49 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Mạng Ảnh Và Video Giống Flickr</title>
-    <!-- Nhúng chính xác thư viện Supabase JS từ CDN -->
-    <script src="https://jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <h1>Mạng chia sẻ ảnh & video ngắn</h1>
-    
-    <!-- Nút chọn ảnh hoặc video ngắn -->
     <input type="file" id="chon-file" accept="image/*,video/*">
-    
-    <!-- Kho hiển thị ảnh và video -->
     <div id="kho-chua-mang" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;"></div>
-
     <script>
-        // Điền chính xác đường dẫn URL chứa ID dự án của bạn
-        const SUPABASE_URL = "https://yndazipatpzmffitvqo.supabase.co";
+        const SUPABASE_URL = "https://supabase.co";
         const SUPABASE_KEY = "sb_publishable_VJn-S8BB7tP-bpWLsYY8QQ__EmspkUF";
-        
-        // Khởi tạo kết nối Supabase đúng cú pháp
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
+        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const nutChonFile = document.getElementById('chon-file');
         const khoChuaMang = document.getElementById('kho-chua-mang');
-
-        // Hàm tải và hiện toàn bộ ảnh/video từ mạng về màn hình
         async function taiDuLieu() {
             khoChuaMang.innerHTML = '<p>Đang tải danh sách ảnh và video...</p>';
             const { data, error } = await supabase.storage.from('flickr-data').list();
             
             if (error) {
-                khoChuaMang.innerHTML = '<p>Lỗi tải dữ liệu: ' + error.message + '</p>';
+                khoChuaMang.innerHTML = '<p>Lỗi tải dữ liệu từ đám mây: ' + error.message + '</p>';
                 return;
             }
-            
             khoChuaMang.innerHTML = '';
             if (data && data.length > 0) {
                 data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                
                 data.forEach(file => {
                     if (file.name === '.emptyFolderPlaceholder') return;
                     
                     const { data: urlData } = supabase.storage.from('flickr-data').getPublicUrl(file.name);
                     const fileUrl = urlData.publicUrl;
-                    
                     if (file.name.match(/\.(mp4|webm|mov|avi)$/i)) {
                         const videoCard = document.createElement('div');
                         videoCard.innerHTML = `<video src="${fileUrl}" style="width:100%; border-radius:8px;" controls muted></video>`;
@@ -60,8 +45,6 @@
                 khoChuaMang.innerHTML = '<p>Chưa có ảnh hoặc video nào. Hãy là người đầu tiên đăng nhé!</p>';
             }
         }
-
-        // Lắng nghe lệnh khi bấm nút đăng file
         nutChonFile.addEventListener('change', async function(e) {
             const files = e.target.files;
             if (files && files.length > 0) {
@@ -72,7 +55,7 @@
                 const { data, error } = await supabase.storage.from('flickr-data').upload(fileName, file);
                 
                 if (error) {
-                    alert("Lỗi đăng file: " + error.message);
+                    alert("Lỗi đăng file lên đám mây: " + error.message);
                 } else {
                     alert("Tuyệt vời quá! File của bạn đã được đăng lên mạng Internet thành công rồi ạ!");
                     nutChonFile.value = '';

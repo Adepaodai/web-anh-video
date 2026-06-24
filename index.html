@@ -10,14 +10,14 @@
     <input type="file" id="chon-file" accept="image/*,video/*">
     <div id="kho-chua-mang" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;"></div>
     <script>
-        const SUPABASE_URL = "https://supabase.co";
+        const SUPABASE_URL = "https://" + "yndazipatpzmffitvqo" + ".supabase.co";
         const SUPABASE_KEY = "sb_publishable_VJn-S8BB7tP-bpWLsYY8QQ__EmspkUF";
-        const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const khoFlickr = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         const nutChonFile = document.getElementById('chon-file');
         const khoChuaMang = document.getElementById('kho-chua-mang');
         async function taiDuLieu() {
             khoChuaMang.innerHTML = '<p>Đang tải danh sách ảnh và video...</p>';
-            const { data, error } = await supabase.storage.from('flickr-data').list();
+           const { data, error } = await khoFlickr.storage.from('flickr-data').list();
             
             if (error) {
                 khoChuaMang.innerHTML = '<p>Lỗi tải dữ liệu từ đám mây: ' + error.message + '</p>';
@@ -29,7 +29,7 @@
                 data.forEach(file => {
                     if (file.name === '.emptyFolderPlaceholder') return;
                     
-                    const { data: urlData } = supabase.storage.from('flickr-data').getPublicUrl(file.name);
+                    const { data: urlData } = khoFlickr.storage.from('flickr-data').getPublicUrl(file.name);
                     const fileUrl = urlData.publicUrl;
                     if (file.name.match(/\.(mp4|webm|mov|avi)$/i)) {
                         const videoCard = document.createElement('div');
@@ -52,7 +52,7 @@
                 const fileName = Date.now() + "_" + file.name;
                 
                 alert("Đang tải file lên mạng Internet, đợi vài giây nhé...");
-                const { data, error } = await supabase.storage.from('flickr-data').upload(fileName, file);
+                const { data, error } = await khoFlickr.storage.from('flickr-data').upload(fileName, file);
                 
                 if (error) {
                     alert("Lỗi đăng file lên đám mây: " + error.message);
